@@ -1,6 +1,7 @@
 plugins {
 	idea
-	kotlin("jvm") version "1.2.71"
+	kotlin("jvm") version "1.3.41"
+	application
 }
 
 group = "com.djrollins"
@@ -12,4 +13,9 @@ repositories {
 }
 
 dependencies {
+	implementation(kotlin("stdlib"))
+}
+
+application {
+	mainClassName = "com.djrollins.apigeekt.MainKt"
 }
