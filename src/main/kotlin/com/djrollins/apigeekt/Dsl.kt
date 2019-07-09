@@ -1,46 +1,8 @@
 package com.djrollins.apigeekt
 
-import com.djrollins.apigeekt.assignmessage.*
+import com.djrollins.apigeekt.dsl.assignmessage.*
+import com.djrollins.apigeekt.model.assignmessage.*
 import java.util.logging.Logger
-
-fun assignMessage(name: String, type: MessageType, block: AssignMessageBuilder.() -> Unit): AssignMessage =
-        AssignMessageBuilder(name, type).apply(block).build()
-
-
-// TODO these `by lazy` invocations are unnecessary. Just initialize the values on construction.
-class AssignMessageBuilder(private val name: String, private val type: MessageType) {
-    private var enabled: Boolean = true
-    private var continueOnError: Boolean = false
-    private val add by lazy { AddBuilder() }
-    private val copy by lazy { CopyBuilder(type) }
-    private val assignVariables by lazy { AssignVariablesBuilder() }
-    private var assignTo: AssignTo? = null
-
-    fun add(block: AddBuilder.() -> Unit) = add.apply(block)
-    fun copy(block: CopyBuilder.() -> Unit) = copy.also(block)
-
-    fun assignTo(variable: Variable) {
-        // TODO parameterize these
-        assignTo = AssignTo(variable, true, null)
-    }
-
-    fun assignVariables(block: AssignVariablesBuilder.() -> Unit) = assignVariables.apply(block)
-
-    fun build(): AssignMessage {
-        return AssignMessage(
-                name,
-                enabled,
-                continueOnError,
-                false,
-                assignTo,
-                assignVariables.build(),
-                add.build(),
-                copy.build(),
-                null,
-                null
-        )
-    }
-}
 
 class CopyBuilder(private val source: MessageType) {
     private val headers by lazy { NameValuePairsBuilder() }
@@ -68,18 +30,8 @@ class CopyBuilder(private val source: MessageType) {
     )
 }
 
-class AddBuilder {
-    private val headers by lazy { NameValuePairsBuilder() }
-    private val params by lazy { NameValuePairsBuilder() }
-
-    fun headers(block: NameValuePairsBuilder.() -> Unit) = headers.apply(block)
-    fun params(block: NameValuePairsBuilder.() -> Unit) = params.apply(block)
-
-    fun build(): Add = Add(Verb.GET, headers.build(), params.build())
-}
-
 class NameValuePairsBuilder {
-    private val entries by lazy { mutableListOf<NameValuePair>() }
+    private val entries = mutableListOf<NameValuePair>()
 
     infix fun String.to(value: String) = entries.add(NameValuePair(this, value))
 
@@ -96,7 +48,7 @@ class AssignVariablesBuilder {
         if (looksLikeSingleVariableDeref(ref)) {
             Logger.getGlobal().info(
                     "The Ref for AssignVariable[$this] looks like variable dereference." +
-                    "Consider dropping the surrounding braces to reference the variable"
+                            "Consider dropping the surrounding braces to reference the variable"
             )
         }
         assignments.add(AssignVariable(VariableType.Ref, this, ref))
@@ -106,7 +58,7 @@ class AssignVariablesBuilder {
         if (looksLikeSingleVariableDeref(ref)) {
             Logger.getGlobal().info(
                     "The Value for AssignVariable[$this] looks like a variable dereference, but the " +
-                    "Value node is for literal values. Use 'Ref' and remove the surrounding braces"
+                            "Value node is for literal values. Use 'Ref' and remove the surrounding braces"
             )
         }
         assignments.add(AssignVariable(VariableType.Value, this, ref))
@@ -116,7 +68,7 @@ class AssignVariablesBuilder {
         if (looksLikeSingleVariableDeref(ref)) {
             Logger.getGlobal().info(
                     "The Value for AssignVariable[$this] looks like a single variable dereference " +
-                    "Use 'Ref' and remove the surrounding braces"
+                            "Use 'Ref' and remove the surrounding braces"
             )
         }
         AssignVariable(VariableType.Template, this, ref)
@@ -124,7 +76,7 @@ class AssignVariablesBuilder {
 
     private fun looksLikeSingleVariableDeref(value: String): Boolean {
         return value.trim().let {
-            it.startsWith('{') && it.endsWith('}') && it.count{ c -> "{}".contains(c) } == 2
+            it.startsWith('{') && it.endsWith('}') && it.count { c -> "{}".contains(c) } == 2
         }
     }
 

@@ -1,6 +1,6 @@
 @file:Suppress("NAME_SHADOWING")
 
-package com.djrollins.apigeekt.assignmessage
+package com.djrollins.apigeekt.model.assignmessage
 
 import java.io.Writer
 
@@ -21,8 +21,6 @@ fun AssignMessage.toXml(writer: Writer) {
         add.toXml(writer)
         copy.toXml(writer)
     }
-
-    writer.writeLn("""</AssignMessage>""")
 }
 
 private fun AssignTo?.toXml(writer: Writer) {
@@ -41,9 +39,6 @@ private fun AssignVariable.toXml(writer: Writer) {
 
 private fun Add.toXml(writer: Writer) {
     writer.writeXmlBlock("Add") {
-        val paramsHeader = if (verb === Verb.GET) "QueryParams" else "FormParams"
-        val paramHeader = if (verb === Verb.GET) "QueryParam" else "FormParam"
-
         if (headers.isNotEmpty()) {
             it.writeXmlBlock("Headers") { writer ->
                 headers.forEach { header ->
@@ -52,10 +47,18 @@ private fun Add.toXml(writer: Writer) {
             }
         }
 
-        if (params.isNotEmpty()) {
-            it.writeXmlBlock(paramsHeader) { writer ->
-                headers.forEach { param ->
-                    writer.writeLn("""<$paramHeader name="${param.name}">${param.value}</Header>""")
+        if (queryParams.isNotEmpty()) {
+            it.writeXmlBlock("QueryParams") { writer ->
+                queryParams.forEach { param ->
+                    writer.writeLn("""<QueryParam name="${param.name}">${param.value}</QueryParam>""")
+                }
+            }
+        }
+
+        if (formParams.isNotEmpty()) {
+            it.writeXmlBlock("FormParams") { writer ->
+                formParams.forEach { param ->
+                    writer.writeLn("""<FormParam name="${param.name}">${param.value}</FormParam>""")
                 }
             }
         }

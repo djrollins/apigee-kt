@@ -1,4 +1,4 @@
-package com.djrollins.apigeekt.assignmessage
+package com.djrollins.apigeekt.model.assignmessage
 
 data class NameValuePair(
         val name: String,
