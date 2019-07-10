@@ -1,8 +1,6 @@
 package com.djrollins.apigeekt.dsl.assignmessage
 
-import com.djrollins.apigeekt.AssignVariablesBuilder
-import com.djrollins.apigeekt.CopyBuilder
-import com.djrollins.apigeekt.Variable
+import com.djrollins.apigeekt.model.Variable
 import com.djrollins.apigeekt.model.assignmessage.*
 import com.djrollins.apigeekt.model.assignmessage.Any
 
@@ -12,9 +10,7 @@ fun assignMessage(name: String): AssignMessageDsl =
 fun assignMessage(name: String, block: AssignMessageBuilder.() -> Unit): AssignMessage =
         AssignMessageBuilder(name, Any).apply(block).build()
 
-class AssignMessageDsl(val name: String) {
-    operator fun invoke(): AssignMessage = null!!
-
+class AssignMessageDsl(private val name: String) {
     val request by lazy { RequestDsl(name, Request) }
 
     fun response(block: AssignMessageResponseBuilder.() -> Unit): AssignMessage =
@@ -53,10 +49,10 @@ class AssignMessageRequestPostBuilder(name: String, messageType: MessageType) : 
     fun add(block: AddPost.() -> Unit) = super.doAdd(block)
 }
 
-open class AssignMessageBuilderBase(private val name: String, private val type: MessageType) {
+open class AssignMessageBuilderBase(private val name: String, type: MessageType) {
     private var enabled: Boolean = true
     private var continueOnError: Boolean = false
-    protected val add = AddBuilderImpl()
+    private val add = AddBuilderImpl()
     private val copy = CopyBuilder(type)
     private val assignVariables = AssignVariablesBuilder()
     private var assignTo: AssignTo? = null

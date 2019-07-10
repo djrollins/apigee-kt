@@ -2,6 +2,7 @@
 
 package com.djrollins.apigeekt.xml
 
+import com.djrollins.apigeekt.model.NameValuePair
 import com.djrollins.apigeekt.model.assignmessage.*
 import java.io.Writer
 

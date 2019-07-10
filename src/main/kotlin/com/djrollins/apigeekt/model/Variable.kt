@@ -1,3 +1,3 @@
-package com.djrollins.apigeekt
+package com.djrollins.apigeekt.model
 
 class Variable(val identifier: String)

@@ -1,42 +1,8 @@
-package com.djrollins.apigeekt
+package com.djrollins.apigeekt.dsl.assignmessage
 
-import com.djrollins.apigeekt.model.assignmessage.*
+import com.djrollins.apigeekt.model.assignmessage.AssignVariable
+import com.djrollins.apigeekt.model.assignmessage.VariableType
 import java.util.logging.Logger
-
-class CopyBuilder(private val source: MessageType) {
-    private val headers by lazy { NameValuePairsBuilder() }
-    private val params by lazy { NameValuePairsBuilder() }
-    var path: Boolean = false
-    var payload: Boolean = false
-    var reasonPhrase: Boolean = false
-    var statusCode: Boolean = false
-    var verb: Boolean = false
-    var version: Boolean = false
-
-    fun headers(block: NameValuePairsBuilder.() -> Unit) = headers.apply(block)
-    fun params(block: NameValuePairsBuilder.() -> Unit) = params.apply(block)
-
-    fun build(): Copy = Copy(
-            source,
-            headers.build(),
-            params.build(),
-            path,
-            payload,
-            reasonPhrase,
-            statusCode,
-            verb,
-            version
-    )
-}
-
-class NameValuePairsBuilder {
-    private val entries = mutableListOf<NameValuePair>()
-
-    infix fun String.to(value: String) = entries.add(NameValuePair(this, value))
-
-    // TODO warn on duplicate names
-    fun build(): List<NameValuePair> = entries
-}
 
 // TODO check for duplicate names?
 // TODO improve the warnings

@@ -1,6 +1,7 @@
 package com.djrollins.apigeekt
 
 import com.djrollins.apigeekt.dsl.assignmessage.assignMessage
+import com.djrollins.apigeekt.model.Variable
 import com.djrollins.apigeekt.xml.XmlWriter
 import com.djrollins.apigeekt.xml.toXml
 import java.io.StringWriter
