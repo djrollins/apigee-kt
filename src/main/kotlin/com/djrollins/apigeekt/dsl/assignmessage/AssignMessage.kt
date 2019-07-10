@@ -4,6 +4,7 @@ import com.djrollins.apigeekt.AssignVariablesBuilder
 import com.djrollins.apigeekt.CopyBuilder
 import com.djrollins.apigeekt.Variable
 import com.djrollins.apigeekt.model.assignmessage.*
+import com.djrollins.apigeekt.model.assignmessage.Any
 
 fun assignMessage(name: String): AssignMessageDsl =
         AssignMessageDsl(name)

@@ -1,16 +1,16 @@
 package com.djrollins.apigeekt
 
 import com.djrollins.apigeekt.dsl.assignmessage.assignMessage
-import com.djrollins.apigeekt.model.assignmessage.toXml
+import com.djrollins.apigeekt.xml.XmlWriter
+import com.djrollins.apigeekt.xml.toXml
 import java.io.StringWriter
-import java.io.Writer
 import java.util.*
 import java.util.logging.Logger
 
 fun main() {
 
     val someVariable = Variable("my.variable")
-    val writer: Writer = StringWriter()
+    val writer = XmlWriter(StringWriter())
 
     // TODO validate no spaces in the name
     assignMessage("ResponseOnly").response {
@@ -71,5 +71,5 @@ fun main() {
         }
     }.toXml(writer)
 
-    Logger.getGlobal().info(writer.toString())
+    Logger.getGlobal().info(writer.writer.toString())
 }
