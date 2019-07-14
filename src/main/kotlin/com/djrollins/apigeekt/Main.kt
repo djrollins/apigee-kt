@@ -1,5 +1,7 @@
 package com.djrollins.apigeekt
 
+import com.djrollins.apigeekt.common.lit
+import com.djrollins.apigeekt.common.ref
 import com.djrollins.apigeekt.dsl.assignmessage.assignMessage
 import com.djrollins.apigeekt.model.Variable
 import com.djrollins.apigeekt.xml.XmlWriter
@@ -45,11 +47,18 @@ fun main() {
     }
 
     assignMessage("Something") {
-        assignTo(someVariable)
+        val variable = ref<Int>("some.variable")
+
+        assignTo {
+            name = "request"
+            createNew = true
+        }
+
         assignVariables {
-            "var2" ref "some-variable"
-            "var2" value "{hardcoded-value}"
-            "var3" template "{some-variable}-{some-other-variable}"
+            "literal" to "some literal value"
+            "ref" to variable
+            "template1" to variable + "-" + ref<Float>("some-other-variable")
+            "template2" to lit("variable: ") + variable
         }
         add {
             headers {

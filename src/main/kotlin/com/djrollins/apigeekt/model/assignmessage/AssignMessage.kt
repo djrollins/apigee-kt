@@ -1,5 +1,6 @@
 package com.djrollins.apigeekt.model.assignmessage
 
+import com.djrollins.apigeekt.common.Assignable
 import com.djrollins.apigeekt.model.NameValuePair
 import com.djrollins.apigeekt.model.Variable
 
@@ -9,7 +10,7 @@ data class AssignMessage(
         val continueOnError: Boolean,
         val ignoreUnresolvedVariables: Boolean,
         val assignTo: AssignTo?,
-        val assignVariables: List<AssignVariable>,
+        val assignVariables: List<AssignVariable<Assignable>>,
         val add: Add,
         val copy: Copy,
         val remove: Any?,
@@ -25,31 +26,28 @@ object Response : MessageType() {
     override fun toString(): String = "response"
 }
 
-object Any : MessageType() {
+object Inferred : MessageType() {
     override fun toString(): String = "response"
 }
 
-
 enum class Verb { GET, POST }
 
-// TODO Create sub types for RequestDsl/Response and GET/POST for Add, Copy etc so only valid members can be used
-
-// params represents FormParams if this is a Post RequestDsl and QueryParams if this is a Get RequestDsl
 data class Add(
         val verb: Verb,
         val headers: List<NameValuePair>,
-        val queryParams: List<NameValuePair>, // TODO Requests only
+        val queryParams: List<NameValuePair>,
         val formParams: List<NameValuePair>
 )
 
 data class AssignTo(
-        val variable: Variable,
         val createNew: Boolean,
-        val type: MessageType?
+        val type: MessageType?,
+        val variable: Variable?
 )
 
-enum class VariableType { Ref, Value, Template }
-data class AssignVariable(val type: VariableType, val name: String, val value: String)
+data class AssignVariable<T : Assignable>(val name: String, val value: T) {
+    val tag = value.tag
+}
 
 // params represents FormParams if this is a Post RequestDsl and QueryParams if this is a Get RequestDsl
 // TODO are headers and params actually lists here or are the docs lying again?

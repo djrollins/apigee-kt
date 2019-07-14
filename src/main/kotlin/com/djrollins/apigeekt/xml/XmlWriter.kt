@@ -2,6 +2,7 @@
 
 package com.djrollins.apigeekt.xml
 
+import com.djrollins.apigeekt.common.Assignable
 import com.djrollins.apigeekt.model.NameValuePair
 import com.djrollins.apigeekt.model.assignmessage.*
 import java.io.Writer
@@ -43,14 +44,16 @@ fun <T : Writer> AssignMessage.toXml(writer: XmlWriter<T>) {
 private fun <T : Writer> AssignTo?.toXml(writer: XmlWriter<T>) {
     this?.let {
         val typeStr: String = type?.let { """ type="$type"""" }.orEmpty()
-        writer.writeLn("""<AssignTo createNew="$createNew"$typeStr>${variable.identifier}</AssignTo>""")
+        val valueStr: String = variable?.let { ">${variable.identifier}</AssignTo" } ?: "/"
+
+        writer.writeLn("""<AssignTo createNew="$createNew"$typeStr$valueStr>""")
     }
 }
 
-private fun <T : Writer> AssignVariable.toXml(writer: XmlWriter<T>) {
+private inline fun <reified T : Assignable, W : Writer> AssignVariable<T>.toXml(writer: XmlWriter<W>) {
     writer.writeXmlBlock("AssignVariable") {
         it.writeLn("""<Name>$name</Name>""")
-        it.writeLn("""<$type>$value</$type>""")
+        it.writeLn("""<$tag>$value</$tag>""")
     }
 }
 

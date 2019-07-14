@@ -2,13 +2,12 @@ package com.djrollins.apigeekt.dsl.assignmessage
 
 import com.djrollins.apigeekt.model.Variable
 import com.djrollins.apigeekt.model.assignmessage.*
-import com.djrollins.apigeekt.model.assignmessage.Any
 
 fun assignMessage(name: String): AssignMessageDsl =
         AssignMessageDsl(name)
 
 fun assignMessage(name: String, block: AssignMessageBuilder.() -> Unit): AssignMessage =
-        AssignMessageBuilder(name, Any).apply(block).build()
+        AssignMessageBuilder(name, Inferred).apply(block).build()
 
 class AssignMessageDsl(private val name: String) {
     val request by lazy { RequestDsl(name, Request) }
@@ -49,7 +48,11 @@ class AssignMessageRequestPostBuilder(name: String, messageType: MessageType) : 
     fun add(block: AddPost.() -> Unit) = super.doAdd(block)
 }
 
-open class AssignMessageBuilderBase(private val name: String, type: MessageType) {
+class AssignToBuilder(private var type: MessageType, var name: String, var createNew: Boolean = false) {
+    fun build(): AssignTo = AssignTo(createNew, type, Variable(name))
+}
+
+open class AssignMessageBuilderBase(private val name: String, private val type: MessageType) {
     private var enabled: Boolean = true
     private var continueOnError: Boolean = false
     private val add = AddBuilderImpl()
@@ -61,9 +64,8 @@ open class AssignMessageBuilderBase(private val name: String, type: MessageType)
 
     fun copy(block: CopyBuilder.() -> Unit) = copy.apply(block)
 
-    fun assignTo(variable: Variable) {
-        // TODO parameterize these
-        assignTo = AssignTo(variable, true, null)
+    fun assignTo(block: AssignToBuilder.() -> Unit) {
+        assignTo = AssignToBuilder(type, name).apply(block).build()
     }
 
     fun assignVariables(block: AssignVariablesBuilder.() -> Unit) = assignVariables.apply(block)
