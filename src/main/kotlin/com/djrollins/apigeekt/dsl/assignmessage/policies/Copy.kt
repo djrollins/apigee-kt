@@ -1,7 +1,8 @@
-package com.djrollins.apigeekt.dsl.assignmessage
+package com.djrollins.apigeekt.dsl.assignmessage.policies
 
-import com.djrollins.apigeekt.model.assignmessage.Copy
-import com.djrollins.apigeekt.model.assignmessage.MessageType
+import com.djrollins.apigeekt.dsl.assignmessage.common.NameValuePairsBuilder
+import com.djrollins.apigeekt.model.assignmessage.policies.Copy
+import com.djrollins.apigeekt.model.assignmessage.policies.MessageType
 
 class CopyBuilder(private val source: MessageType) {
     private val headers by lazy { NameValuePairsBuilder() }

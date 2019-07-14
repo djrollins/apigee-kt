@@ -2,8 +2,7 @@ package com.djrollins.apigeekt
 
 import com.djrollins.apigeekt.common.lit
 import com.djrollins.apigeekt.common.ref
-import com.djrollins.apigeekt.dsl.assignmessage.assignMessage
-import com.djrollins.apigeekt.model.Variable
+import com.djrollins.apigeekt.dsl.assignmessage.policies.assignMessage
 import com.djrollins.apigeekt.xml.XmlWriter
 import com.djrollins.apigeekt.xml.toXml
 import java.io.StringWriter
@@ -12,7 +11,6 @@ import java.util.logging.Logger
 
 fun main() {
 
-    val someVariable = Variable("my.variable")
     val writer = XmlWriter(StringWriter())
 
     // TODO validate no spaces in the name

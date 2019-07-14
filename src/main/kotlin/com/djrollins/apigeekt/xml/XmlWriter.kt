@@ -4,7 +4,7 @@ package com.djrollins.apigeekt.xml
 
 import com.djrollins.apigeekt.common.Assignable
 import com.djrollins.apigeekt.model.NameValuePair
-import com.djrollins.apigeekt.model.assignmessage.*
+import com.djrollins.apigeekt.model.assignmessage.policies.*
 import java.io.Writer
 
 const val INDENT = "    "

@@ -1,7 +1,7 @@
-package com.djrollins.apigeekt.dsl.assignmessage
+package com.djrollins.apigeekt.dsl.assignmessage.policies
 
 import com.djrollins.apigeekt.model.Variable
-import com.djrollins.apigeekt.model.assignmessage.*
+import com.djrollins.apigeekt.model.assignmessage.policies.*
 
 fun assignMessage(name: String): AssignMessageDsl =
         AssignMessageDsl(name)

@@ -1,7 +1,8 @@
-package com.djrollins.apigeekt.dsl.assignmessage
+package com.djrollins.apigeekt.dsl.assignmessage.policies
 
-import com.djrollins.apigeekt.model.assignmessage.Add
-import com.djrollins.apigeekt.model.assignmessage.Verb
+import com.djrollins.apigeekt.dsl.assignmessage.common.NameValuePairsBuilder
+import com.djrollins.apigeekt.model.assignmessage.policies.Add
+import com.djrollins.apigeekt.model.assignmessage.policies.Verb
 
 interface AddQueryParams {
     fun queryParams(block: NameValuePairsBuilder.() -> Unit)

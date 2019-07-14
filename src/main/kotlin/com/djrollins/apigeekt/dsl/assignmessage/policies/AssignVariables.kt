@@ -1,10 +1,10 @@
-package com.djrollins.apigeekt.dsl.assignmessage
+package com.djrollins.apigeekt.dsl.assignmessage.policies
 
 import com.djrollins.apigeekt.common.Assignable
 import com.djrollins.apigeekt.common.Template
 import com.djrollins.apigeekt.common.Value
 import com.djrollins.apigeekt.common.VariableReference
-import com.djrollins.apigeekt.model.assignmessage.AssignVariable
+import com.djrollins.apigeekt.model.assignmessage.policies.AssignVariable
 
 // TODO check for duplicate names?
 // TODO improve the warnings

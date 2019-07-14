@@ -1,4 +1,4 @@
-package com.djrollins.apigeekt.model.assignmessage
+package com.djrollins.apigeekt.model.assignmessage.policies
 
 import com.djrollins.apigeekt.common.Assignable
 import com.djrollins.apigeekt.model.NameValuePair
