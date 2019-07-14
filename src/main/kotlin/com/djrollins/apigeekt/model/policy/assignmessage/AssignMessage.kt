@@ -1,11 +1,12 @@
-package com.djrollins.apigeekt.model.assignmessage.policies
+package com.djrollins.apigeekt.model.policy.assignmessage
 
 import com.djrollins.apigeekt.common.Assignable
 import com.djrollins.apigeekt.model.NameValuePair
-import com.djrollins.apigeekt.model.Variable
+import com.djrollins.apigeekt.model.Property
+import com.djrollins.apigeekt.model.policy.Policy
 
 data class AssignMessage(
-        val name: String,
+        override val name: String,
         val enabled: Boolean,
         val continueOnError: Boolean,
         val ignoreUnresolvedVariables: Boolean,
@@ -15,7 +16,7 @@ data class AssignMessage(
         val copy: Copy,
         val remove: Any?,
         val set: Any?
-)
+): Policy
 
 sealed class MessageType
 object Request : MessageType() {
@@ -42,7 +43,7 @@ data class Add(
 data class AssignTo(
         val createNew: Boolean,
         val type: MessageType?,
-        val variable: Variable?
+        val property: Property<*>?
 )
 
 data class AssignVariable<T : Assignable>(val name: String, val value: T) {

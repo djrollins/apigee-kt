@@ -4,7 +4,7 @@ package com.djrollins.apigeekt.xml
 
 import com.djrollins.apigeekt.common.Assignable
 import com.djrollins.apigeekt.model.NameValuePair
-import com.djrollins.apigeekt.model.assignmessage.policies.*
+import com.djrollins.apigeekt.model.policy.assignmessage.*
 import java.io.Writer
 
 const val INDENT = "    "
@@ -44,7 +44,7 @@ fun <T : Writer> AssignMessage.toXml(writer: XmlWriter<T>) {
 private fun <T : Writer> AssignTo?.toXml(writer: XmlWriter<T>) {
     this?.let {
         val typeStr: String = type?.let { """ type="$type"""" }.orEmpty()
-        val valueStr: String = variable?.let { ">${variable.identifier}</AssignTo" } ?: "/"
+        val valueStr: String = property?.let { ">${property.identifier}</AssignTo" } ?: "/"
 
         writer.writeLn("""<AssignTo createNew="$createNew"$typeStr$valueStr>""")
     }

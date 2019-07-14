@@ -1,7 +1,21 @@
-package com.djrollins.apigeekt.dsl.assignmessage.policies
+package com.djrollins.apigeekt.dsl.policy.assignmessage
 
-import com.djrollins.apigeekt.model.Variable
-import com.djrollins.apigeekt.model.assignmessage.policies.*
+import com.djrollins.apigeekt.dsl.common.Builder
+import com.djrollins.apigeekt.model.Property
+import com.djrollins.apigeekt.model.policy.assignmessage.*
+
+/*
+<AssignMessage continueOnError="false" enabled="true" name="assign-message-default">
+  <DisplayName>Assign Message-1</DisplayName>
+  <Properties/>
+  <Copy/>
+  <Remove/> <Add/>
+  <Set/>
+  <AssignVariable/>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>
+*/
 
 fun assignMessage(name: String): AssignMessageDsl =
         AssignMessageDsl(name)
@@ -12,14 +26,14 @@ fun assignMessage(name: String, block: AssignMessageBuilder.() -> Unit): AssignM
 class AssignMessageDsl(private val name: String) {
     val request by lazy { RequestDsl(name, Request) }
 
+    fun request(block: AssignMessageRequestBuilder.() -> Unit): AssignMessage =
+            AssignMessageRequestBuilder(name, Request).apply(block).build()
+
     fun response(block: AssignMessageResponseBuilder.() -> Unit): AssignMessage =
             AssignMessageResponseBuilder(name, Response).apply(block).build()
 }
 
 class RequestDsl(private val name: String, private val messageType: MessageType) {
-    operator fun invoke(block: AssignMessageRequestBuilder.() -> Unit): AssignMessage =
-            AssignMessageRequestBuilder(name, messageType).apply(block).build()
-
     fun get(block: AssignMessageRequestGetBuilder.() -> Unit): AssignMessage =
             AssignMessageRequestGetBuilder(name, messageType).apply(block).build()
 
@@ -49,10 +63,10 @@ class AssignMessageRequestPostBuilder(name: String, messageType: MessageType) : 
 }
 
 class AssignToBuilder(private var type: MessageType, var name: String, var createNew: Boolean = false) {
-    fun build(): AssignTo = AssignTo(createNew, type, Variable(name))
+    fun build(): AssignTo = AssignTo(createNew, type, Property<Any>(name))
 }
 
-open class AssignMessageBuilderBase(private val name: String, private val type: MessageType) {
+open class AssignMessageBuilderBase(private val name: String, private val type: MessageType): Builder<AssignMessage> {
     private var enabled: Boolean = true
     private var continueOnError: Boolean = false
     private val add = AddBuilderImpl()
@@ -70,7 +84,7 @@ open class AssignMessageBuilderBase(private val name: String, private val type: 
 
     fun assignVariables(block: AssignVariablesBuilder.() -> Unit) = assignVariables.apply(block)
 
-    fun build(): AssignMessage {
+    override fun build(): AssignMessage {
         return AssignMessage(
                 name,
                 enabled,

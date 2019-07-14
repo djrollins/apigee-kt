@@ -1,8 +1,23 @@
-package com.djrollins.apigeekt.dsl.assignmessage.policies
+package com.djrollins.apigeekt.dsl.policy.assignmessage
 
-import com.djrollins.apigeekt.dsl.assignmessage.common.NameValuePairsBuilder
-import com.djrollins.apigeekt.model.assignmessage.policies.Add
-import com.djrollins.apigeekt.model.assignmessage.policies.Verb
+import com.djrollins.apigeekt.dsl.common.Builder
+import com.djrollins.apigeekt.dsl.common.NameValuePairsBuilder
+import com.djrollins.apigeekt.model.policy.assignmessage.Add
+import com.djrollins.apigeekt.model.policy.assignmessage.Verb
+
+/*
+  <Add>
+    <FormParams>
+      <FormParam name="formparam_name">formparam_value</FormParam>
+    </FormParams>
+    <Headers>
+      <Header name="header_name">header_value</Header>
+    </Headers>
+    <QueryParams>
+      <QueryParam name="queryparam_name">queryparam_value</QueryParam>
+    </QueryParams>
+  </Add>
+*/
 
 interface AddQueryParams {
     fun queryParams(block: NameValuePairsBuilder.() -> Unit)
@@ -21,7 +36,7 @@ interface AddPost : AddFormParams, AddHeaders
 
 interface AddBuilder : AddPost, AddGet
 
-class AddBuilderImpl : AddBuilder {
+class AddBuilderImpl : AddBuilder, Builder<Add> {
     private val headers = NameValuePairsBuilder()
     private val queryParams = NameValuePairsBuilder()
     private val formParams = NameValuePairsBuilder()
@@ -38,6 +53,6 @@ class AddBuilderImpl : AddBuilder {
         formParams.apply(block)
     }
 
-    fun build(): Add = Add(Verb.GET, headers.build(), queryParams.build(), formParams.build())
+    override fun build(): Add = Add(Verb.GET, headers.build(), queryParams.build(), formParams.build())
 }
 
